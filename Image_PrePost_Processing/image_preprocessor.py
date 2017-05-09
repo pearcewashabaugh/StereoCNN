@@ -38,7 +38,7 @@ def image_resizer(im1loc, pic_height_pix, pic_width_pix = False, displacement = 
         pic_width_pix = int(np.floor(pic_height_pix * aspect_ratio))
     # Normalize the sizes of the images
     im = \
-        ski.transform.resize(leftim, (pic_height_pix, pic_width_pix))
+        ski.transform.resize(leftim, (pic_height_pix, pic_width_pix), mode = 'constant')
 
     # If the image represents a displacement map, make sure that it has only one
     # value for each pixel location.
@@ -142,9 +142,10 @@ def subim_maker_trainer(im1, im2, disp, subim1_size, vmin, vmax, oldw):
             oneg = int(oneg)
             if (b-d+oneg)<0:
                 oneg = d-b
+
             elif (b-d+oneg+subim1_size)> im2_pad.shape[1]:
                 oneg = d-b + im2_pad.shape[1] - subim1_size
-
+            oneg = int(.75*oneg)
             subim2_neg = im2_pad[a:(a + subim1_size), b-d+oneg:(b - d + oneg + subim1_size), :]
             subim2_bank.append([subim2_pos, subim2_neg])
             im_index += 1

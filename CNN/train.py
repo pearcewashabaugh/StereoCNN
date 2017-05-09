@@ -43,9 +43,10 @@ def trainer(pic_h_px, pic_w_px, s_lIm_size, s_rIm_pad):
     s_Im_bank = []
     
     im_index = 0
-    print("Loading and chopping images.")
+    print("Loading and chopping training images.")
     for filename in os.listdir("../Data/middlebury-perfect"):
-    
+        print('image', im_index, 'out of', len(os.listdir("../Data/middlebury-perfect"))-1)
+        im_index += 1
         calib = open('../Data/middlebury-perfect/%s/calib.txt' % filename, 'r')
         calibr = calib.read()
         vminind = calibr.find('vmin=')
@@ -97,26 +98,16 @@ def trainer(pic_h_px, pic_w_px, s_lIm_size, s_rIm_pad):
                 s_Im_neg_bank_fin.append([tempneg,[i,j]])
 
     # fig = plt.figure(1)
-    # plt.title('s_lIm')
-    # plt.imshow( s_lIm_bank_ij[2,3,-3,:,:,:])
-    # fig = plt.figure(2)
     # plt.title('s_rIm_pos')
-    # plt.imshow( s_rIm_pos_bank_ij[2,3,-3,:,:,:])
-    # fig = plt.figure(3)
+    # plt.imshow( s_Im_pos_bank_fin[104][0])
+    # fig = plt.figure(2)
     # plt.title('s_rIm_neg')
-    # plt.imshow( s_rIm_neg_bank_ij[2,3,-3,:,:,:])
-    # fig = plt.figure(4)
-    # plt.title('lIm')
-    # plt.imshow(lIm)
-    # fig = plt.figure(5)
-    # plt.title('rIm')
-    # plt.imshow(rIm)
-    
+    # plt.imshow( s_Im_neg_bank_fin[104][0])
     # plt.show()
-    
-    #sys.exit()
+    # sys.exit()
+
     ###############################################################################
     # Create a dual-conv-neural net.
     print("Creating and training neural net:")
-    dnn.dual_conv_net(s_Im_pos_bank_fin, s_Im_neg_bank_fin)
+    dnn.dual_conv_net(s_Im_pos_bank_fin, s_Im_neg_bank_fin, s_num_h, s_num_w)
     

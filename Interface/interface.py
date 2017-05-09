@@ -7,8 +7,8 @@ lIm_loc = '../Data/Pictures_Data/left.jpeg'
 rIm_loc = '../Data/Pictures_Data/right.jpeg'
 
 # Specify desired resolution (higher resolutions take much longer):
-pic_h_px = 500
-pic_w_px = 667
+pic_h_px = 100
+pic_w_px = 133
 
 # Will we be training this neural net or use a previously trained model?
 TRAINING = True

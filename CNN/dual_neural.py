@@ -16,9 +16,11 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 
 class dual_conv_net(object):
-    def __init__(self, s_Im_pos_bank, s_Im_neg_bank):
+    def __init__(self, s_Im_pos_bank, s_Im_neg_bank, s_num_h, s_num_w):
         self.s_Im_pos_bank = s_Im_pos_bank
         self.s_Im_neg_bank = s_Im_neg_bank
+        self.s_num_h = s_num_h
+        self.s_num_w = s_num_w
         self.s_Im_size = s_Im_pos_bank[0][0].shape[0]
 
         self.num_classes = 2
@@ -86,9 +88,8 @@ class dual_conv_net(object):
         x_test_l = np.array([k[0][:,:self.s_Im_size,:] for k in x_test])
         x_train_r = np.array([k[0][:,self.s_Im_size:,:] for k in x_train])
         x_test_r = np.array([k[0][:,self.s_Im_size:,:] for k in x_test])
-        x_train_loc = np.array([k[1] for k in x_train])
-        x_test_loc = np.array([k[1] for k in x_test])
-
+        x_train_loc = np.array([[k[1][0]/(self.s_num_h-1),k[1][1]/(self.s_num_w-1)] for k in x_train])
+        x_test_loc = np.array([[k[1][0]/(self.s_num_h-1),k[1][1]/(self.s_num_w-1)] for k in x_test])
 
         y_train = keras.utils.to_categorical(y_train)
         y_test = keras.utils.to_categorical(y_test)
@@ -98,12 +99,11 @@ class dual_conv_net(object):
     def dual_conv_creator(self):
         # First, define the vision modules
         subim_input = Input(shape=(self.s_Im_size, self.s_Im_size,3))
-        x = Conv2D(32, (3, 3), activation='relu')(subim_input)
-        x = Conv2D(64, (3, 3))(x)
+        x = Conv2D(64, (5, 5), activation='relu')(subim_input)
+        x = Conv2D(128, (3, 3))(x)
         x = MaxPooling2D((2, 2))(x)
         x = Dropout(0.25)(x)
         x = Flatten()(x)
-        x = Dense(128, activation = 'relu')(x)
         out = Dropout(0.25)(x)
         #out = Flatten()(x)
         
@@ -119,6 +119,7 @@ class dual_conv_net(object):
         out_b = vision_model(subim_r)
         
         concatenated = keras.layers.concatenate([out_a, out_b, subim_pos])
+        concatenated = Dense(256, activation = 'relu')(concatenated)
         out = Dense(2, activation='sigmoid')(concatenated)
     
         classification_model = Model([subim_l, subim_r, subim_pos], out)
@@ -126,7 +127,7 @@ class dual_conv_net(object):
         #############################################
         # Choose method to compile model
 
-        learning_rate = 1000
+        learning_rate = .1
         #decay_rate = learning_rate/self.epochs
         decay_rate = 0
         momentum = 1
