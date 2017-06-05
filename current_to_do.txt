@@ -1,0 +1,11 @@
+TODO:
+
+-Verify correctness of whitening procedures
+
+-Create logging functionality for hyperparameters and results
+	-store in a SQL database
+
+-Store images in a SQL database for better memory management
+	-modularize image preprocessing so that it doesn't get run every time
+
+-Create more robust input data

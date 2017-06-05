@@ -136,16 +136,16 @@ def subim_maker_trainer(im1, im2, disp, subim1_size, vmin, vmax, oldw):
                 print(i,j,a,b,d)
             whichoneg = np.random.random_sample([1])
             if whichoneg < .5:
-                oneg = -np.random.random_sample([1])*1*(subim1_size+4)-4
+                oneg = -np.random.random_sample([1])*3*(subim1_size+4)-4
             else:
-                oneg = np.random.random_sample([1])*1*(subim1_size+4)+4
+                oneg = np.random.random_sample([1])*3*(subim1_size+4)+4
             oneg = int(oneg)
             if (b-d+oneg)<0:
                 oneg = d-b
 
             elif (b-d+oneg+subim1_size)> im2_pad.shape[1]:
                 oneg = d-b + im2_pad.shape[1] - subim1_size
-            oneg = int(.75*oneg)
+            oneg = int(oneg)
             subim2_neg = im2_pad[a:(a + subim1_size), b-d+oneg:(b - d + oneg + subim1_size), :]
             subim2_bank.append([subim2_pos, subim2_neg])
             im_index += 1

@@ -1,0 +1,56 @@
+{"config": 
+	{"input_layers": 
+		[["input_2", 0, 0], ["input_3", 0, 0], ["input_4", 0, 0]], 
+		"name": "model_2", 
+		"layers": [
+			{
+				"config": 
+					{
+					"dtype": "float32", "name": "input_2", "batch_input_shape": [null, 10, 10, 3], "sparse": false
+					}, 		
+				"name": "input_2", "class_name": "InputLayer", "inbound_nodes": []
+			},
+		 	{
+		 		"config": {"dtype": "float32", "name": "input_3", "batch_input_shape": [null, 10, 10, 3], "sparse": false},
+		 		"name": "input_3", "class_name": "InputLayer", "inbound_nodes": []}, 
+		 	{
+		 		"config": 
+		 		{
+		 			"input_layers": [["input_1", 0, 0]], 
+		 			"name": "model_1", 
+		 			"layers": [{"config": {"dtype": "float32", "name": "input_1", "sparse": false, "batch_input_shape": [null, 10, 10, 3]}, "name": "input_1", "class_name": "InputLayer", "inbound_nodes": []},
+		 				{
+		 					"config": {"dilation_rate": [1, 1], "data_format": "channels_last", "activity_regularizer": null, "filters": 64, "kernel_size": [5, 5], "bias_constraint": null, "bias_regularizer": null, "activation": "relu", "trainable": true, "strides": [1, 1], "name": "conv2d_1", "bias_initializer": {"config": {}, "class_name": "Zeros"}, "kernel_initializer": {"config": {"distribution": "uniform", "seed": null, "scale": 1.0, "mode": "fan_avg"}, "class_name": "VarianceScaling"}, "padding": "valid", "use_bias": true, "kernel_regularizer": null, "kernel_constraint": null},
+		 					"name": "conv2d_1", "class_name": "Conv2D", "inbound_nodes": [[["input_1", 0, 0, {}]]]
+		 				},
+		 				{
+		 					"config": {"dilation_rate": [1, 1], "data_format": "channels_last", "activity_regularizer": null, "filters": 128, "kernel_size": [3, 3], "bias_constraint": null, "bias_regularizer": null, "activation": "relu", "trainable": true, "strides": [1, 1], "name": "conv2d_2", "bias_initializer": {"config": {}, "class_name": "Zeros"}, "kernel_initializer": {"config": {"distribution": "uniform", "seed": null, "scale": 1.0, "mode": "fan_avg"}, "class_name": "VarianceScaling"}, "padding": "valid", "use_bias": true, "kernel_regularizer": null, "kernel_constraint": null}, 
+		 					"name": "conv2d_2", "class_name": "Conv2D", "inbound_nodes": [[["conv2d_1", 0, 0, {}]]]
+		 				},
+		 				{
+		 					"config": {"trainable": true, "strides": [2, 2], "name": "max_pooling2d_1", "pool_size": [2, 2], "padding": "valid", "data_format": "channels_last"}, "name": "max_pooling2d_1", "class_name": "MaxPooling2D", "inbound_nodes": [[["conv2d_2", 0, 0, {}]]]},
+		 				{
+		 					"config": {"trainable": true, "name": "dropout_1", "rate": 0.5}, "name": "dropout_1", "class_name": "Dropout", "inbound_nodes": [[["max_pooling2d_1", 0, 0, {}]]]
+		 				},
+		 				{
+		 					"config": {"trainable": true, "name": "flatten_1"}, "name": "flatten_1", "class_name": "Flatten", "inbound_nodes": [[["dropout_1", 0, 0, {}]]]
+		 				},
+		 				{
+		 					"config": {"trainable": true, "name": "dropout_2", "rate": 0.5}, "name": "dropout_2", "class_name": "Dropout", "inbound_nodes": [[["flatten_1", 0, 0, {}]]]
+		 				}], 
+		 			"output_layers": [["dropout_2", 0, 0]]
+		 		},
+		 		"name": "model_1", 
+		 		"class_name": "Model", 
+		 		"inbound_nodes": [[["input_2", 0, 0, {}]], [["input_3", 0, 0, {}]]]
+		 	},
+		 	{
+		 		"config": {"dtype": "float32", "name": "input_4", "batch_input_shape": [null, 2], "sparse": false}, "name": "input_4", "class_name": "InputLayer", "inbound_nodes": []}, 
+		 	{
+		 		"config": {"axis": -1, "trainable": true, "name": "concatenate_1"}, "name": "concatenate_1", "class_name": "Concatenate", "inbound_nodes": [[["model_1", 1, 0, {}], ["model_1", 2, 0, {}], ["input_4", 0, 0, {}]]]}, 
+		 	{
+		 		"config": {"bias_regularizer": null, "activity_regularizer": null, "trainable": true, "bias_constraint": null, "activation": "relu", "units": 128, "name": "dense_1", "bias_initializer": {"config": {}, "class_name": "Zeros"}, "kernel_initializer": {"config": {"distribution": "uniform", "mode": "fan_avg", "scale": 1.0, "seed": null}, "class_name": "VarianceScaling"}, "use_bias": true, "kernel_regularizer": null, "kernel_constraint": null}, "name": "dense_1", "class_name": "Dense", "inbound_nodes": [[["concatenate_1", 0, 0, {}]]]}, 
+		 	{
+		 		"config": {"bias_regularizer": null, "activity_regularizer": null, "trainable": true, "bias_constraint": null, "activation": "sigmoid", "units": 2, "name": "dense_2", "bias_initializer": {"config": {}, "class_name": "Zeros"}, "kernel_initializer": {"config": {"distribution": "uniform", "mode": "fan_avg", "scale": 1.0, "seed": null}, "class_name": "VarianceScaling"}, "use_bias": true, "kernel_regularizer": null, "kernel_constraint": null}, "name": "dense_2", "class_name": "Dense", "inbound_nodes": [[["dense_1", 0, 0, {}]]]}],
+		"output_layers": [["dense_2", 0, 0]]}, 
+	"class_name": "Model", "keras_version": "2.0.3", "backend": "theano"}
